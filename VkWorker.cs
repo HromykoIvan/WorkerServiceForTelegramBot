@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -19,10 +18,18 @@ namespace WorkerServiceVkService
 {
     public class VkWorker : BackgroundService
     {
+        private readonly ILogger<VkWorker> _logger;
+
+        public VkWorker(ILogger<VkWorker> logger)
+        {
+            _logger = logger;
+        }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                _logger.LogInformation("VkWorker running at: {time}", DateTimeOffset.Now);
+
                 VkApi vk = new VkApi();
 
                 #region Auth Параметры авторизации
